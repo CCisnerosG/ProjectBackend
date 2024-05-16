@@ -5,10 +5,10 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "products")
-public class Product {
+@Table(name = "pokemons")
+public class Pokemon {
     @Id
-    @Column(nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(nullable = false)
@@ -50,9 +50,9 @@ public class Product {
     @Column(nullable = false)
     private Boolean isLegendary;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "product_id")
-    private List<ProductEvolution> evolution;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "evolution_id", referencedColumnName = "id")
+    private Evolution evolution;
 
     public Integer getId() {
         return id;
@@ -166,11 +166,11 @@ public class Product {
         isLegendary = legendary;
     }
 
-    public List<ProductEvolution> getEvolution() {
+    public Evolution getEvolution() {
         return evolution;
     }
 
-    public void setEvolution(List<ProductEvolution> evolution) {
+    public void setEvolution(Evolution evolution) {
         this.evolution = evolution;
     }
 }

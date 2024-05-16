@@ -3,9 +3,10 @@ package com.example.ProjectBackend.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "product_evolutions")
-public class ProductEvolution {
+@Table(name = "evolutions")
+public class Evolution {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(nullable = false)
@@ -16,10 +17,6 @@ public class ProductEvolution {
 
     @Column(nullable = false)
     private String type;
-
-    @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
 
     public Integer getId() {
         return id;
@@ -51,13 +48,5 @@ public class ProductEvolution {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
     }
 }
