@@ -1,17 +1,10 @@
-package com.example.ProjectBackend.entities;
+package com.example.ProjectBackend.dtos;
 
+import com.example.ProjectBackend.entities.User;
 import jakarta.persistence.*;
 
-@Entity
-@Table(name = "shoppingcart")
-public class ShoppingCart {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
+public class ShoppingCartDto {
     private Long id;
-
-    @ManyToOne //VERIFICAR ESTO, NO ESTOY SEGURO SI ES 0NETOONE
-    @JoinColumn(name = "user_id")
     private User user;
 
     public Long getId() {

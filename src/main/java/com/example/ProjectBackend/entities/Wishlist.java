@@ -2,17 +2,22 @@ package com.example.ProjectBackend.entities;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
+@Table(name = "wishlist")
 @Entity
-@Table(name = "shoppingcart")
-public class ShoppingCart {
+public class Wishlist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
 
-    @ManyToOne //VERIFICAR ESTO, NO ESTOY SEGURO SI ES 0NETOONE
-    @JoinColumn(name = "user_id")
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @OneToMany(mappedBy = "wishlist", cascade = CascadeType.ALL)
+    private List<WishlistProduct> products;
 
     public Long getId() {
         return id;
@@ -28,5 +33,13 @@ public class ShoppingCart {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<WishlistProduct> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<WishlistProduct> products) {
+        this.products = products;
     }
 }

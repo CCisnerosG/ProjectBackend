@@ -36,8 +36,8 @@ public class SecurityConfiguration {
         http.csrf(csrf -> csrf.disable())
                 .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()))
                 .authorizeRequests(authorize -> authorize
-                        .requestMatchers(new AntPathRequestMatcher("/auth/**", "POST")).permitAll() // Allow POST requests to /user without authentication
-                        .anyRequest().authenticated() // Ensures all requests are authenticated.
+                        .requestMatchers(new AntPathRequestMatcher("/auth/**", "POST"), new AntPathRequestMatcher("/api/v1/pokemon", "GET")).permitAll()
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -52,7 +52,7 @@ public class SecurityConfiguration {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOrigins(List.of("http://localhost:5173"));
-        configuration.setAllowedMethods(List.of("GET","POST"));
+        configuration.setAllowedMethods(List.of("GET","POST","DELETE","PUT"));
         configuration.setAllowedHeaders(List.of("Authorization","Content-Type"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

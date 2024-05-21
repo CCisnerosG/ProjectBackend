@@ -9,6 +9,7 @@ import com.example.ProjectBackend.entities.User;
 import com.example.ProjectBackend.repositories.RoleRepository;
 import com.example.ProjectBackend.repositories.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -53,6 +54,11 @@ public class AuthenticationService {
     }
 
     public User authenticate(LoginUserDto input) {
+        if (input.getEmail() == null || input.getEmail().isEmpty() ||
+                input.getPassword() == null || input.getPassword().isEmpty()) {
+            throw new BadCredentialsException("Email and password must not be empty");
+        }
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         input.getEmail(),

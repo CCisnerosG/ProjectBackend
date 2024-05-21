@@ -1,57 +1,22 @@
-package com.example.ProjectBackend.entities;
+package com.example.ProjectBackend.dtos;
 
-import jakarta.persistence.*;
 
-import java.util.List;
-
-@Entity
-@Table(name = "pokemons")
-public class Pokemon {
-    @Id
+public class PokemonDto {
     private Integer id;
-
-    @Column(nullable = false)
     private String name;
-
-    @Column(nullable = false)
     private String sprite;
-
-    @Column(nullable = false)
     private String type;
-
-    @Column(nullable = false)
     private Integer weight;
-
-    @Column(nullable = false)
     private Integer height;
-
-    @Column(nullable = false)
     private Integer price;
-
-    @Column(nullable = false)
     private Integer subtotal;
-
-    @Column(nullable = false)
     private Integer taxes;
-
-    @Column(nullable = false)
     private Integer save;
-
-    @Column(nullable = false, length = 1024)
     private String description;
-
-    @Column(nullable = false)
     private Integer generation;
-
-    @Column(nullable = false)
     private String cries;
-
-    @Column(nullable = false)
     private Boolean isLegendary;
-
-//    @OneToMany(mappedBy = "pokemon", cascade = CascadeType.ALL)
 //    private List<Evolution> evolutions;
-
 
     public Integer getId() {
         return id;
@@ -172,4 +137,6 @@ public class Pokemon {
 //    public void setEvolutions(List<Evolution> evolutions) {
 //        this.evolutions = evolutions;
 //    }
+
+
 }

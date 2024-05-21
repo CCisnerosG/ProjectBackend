@@ -1,7 +1,11 @@
 package com.example.ProjectBackend.responses;
 
+import com.example.ProjectBackend.entities.Role;
+
 public class LoginResponse {
     private String token;
+    private Long userId;
+    private String role;
 
     private long expiresIn;
 
@@ -23,9 +27,29 @@ public class LoginResponse {
         return this;
     }
 
+    public Long getUserId() {
+        return userId;
+    }
+
+    public LoginResponse setUserId(Long userId) {
+        this.userId = userId;
+        return this;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public LoginResponse setRole(String role) {
+        this.role = role;
+        return this;
+    }
+
     @Override
     public String toString() {
         return "LoginResponse{" +
+                "userId='" + userId + '\'' +
+                "role='" + role + '\'' +
                 "token='" + token + '\'' +
                 ", expiresIn=" + expiresIn +
                 '}';

@@ -3,6 +3,7 @@ package com.example.ProjectBackend.controllers;
 
 import com.example.ProjectBackend.dtos.LoginUserDto;
 import com.example.ProjectBackend.dtos.RegisterUserDto;
+import com.example.ProjectBackend.entities.Role;
 import com.example.ProjectBackend.entities.User;
 import com.example.ProjectBackend.responses.LoginResponse;
 import com.example.ProjectBackend.services.AuthenticationService;
@@ -32,10 +33,13 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) {
         User authenticatedUser = authenticationService.authenticate(loginUserDto);
-
         String jwtToken = jwtService.generateToken(authenticatedUser);
 
-        LoginResponse loginResponse = new LoginResponse().setToken(jwtToken).setExpiresIn(jwtService.getExpirationTime());
+        LoginResponse loginResponse = new LoginResponse()
+                .setToken(jwtToken)
+                .setExpiresIn(jwtService.getExpirationTime())
+                .setUserId(authenticatedUser.getId())
+                .setRole(authenticatedUser.getRole().getName().toString());
 
         return ResponseEntity.ok(loginResponse);
     }
