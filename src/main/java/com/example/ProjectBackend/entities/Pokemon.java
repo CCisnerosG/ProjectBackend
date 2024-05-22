@@ -49,9 +49,14 @@ public class Pokemon {
     @Column(nullable = false)
     private Boolean isLegendary;
 
+    private List<String> other_sprites;
+
 //    @OneToMany(mappedBy = "pokemon", cascade = CascadeType.ALL)
 //    private List<Evolution> evolutions;
 
+
+    public Pokemon() {
+    }
 
     public Integer getId() {
         return id;
@@ -165,7 +170,15 @@ public class Pokemon {
         isLegendary = legendary;
     }
 
-//    public List<Evolution> getEvolutions() {
+    public List<String> getOther_sprites() {
+        return other_sprites;
+    }
+
+    public void setOther_sprites(List<String> other_sprites) {
+        this.other_sprites = other_sprites;
+    }
+
+    //    public List<Evolution> getEvolutions() {
 //        return evolutions;
 //    }
 //

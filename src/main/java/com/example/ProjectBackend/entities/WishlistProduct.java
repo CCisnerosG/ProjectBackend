@@ -9,13 +9,16 @@ public class WishlistProduct {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "wishlist_id")
     private Wishlist wishlist;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "pokemon_id")
     private Pokemon pokemon;
+
+    public WishlistProduct() {
+    }
 
     public Long getId() {
         return id;

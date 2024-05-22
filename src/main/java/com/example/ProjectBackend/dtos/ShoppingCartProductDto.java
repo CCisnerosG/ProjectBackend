@@ -2,8 +2,9 @@ package com.example.ProjectBackend.dtos;
 
 public class ShoppingCartProductDto {
     private Long id;
-    private ShoppingCartDto shoppingCartDto;
-    private PokemonDto pokemonDto;
+    private Long shoppingCartId;
+    private Long pokemonId;
+    private String pokemonName;
     private Integer quantity;
     private Integer price;
 
@@ -15,20 +16,28 @@ public class ShoppingCartProductDto {
         this.id = id;
     }
 
-    public ShoppingCartDto getShoppingCartDto() {
-        return shoppingCartDto;
+    public Long getShoppingCartId() {
+        return shoppingCartId;
     }
 
-    public void setShoppingCartDto(ShoppingCartDto shoppingCartDto) {
-        this.shoppingCartDto = shoppingCartDto;
+    public void setShoppingCartId(Long shoppingCartId) {
+        this.shoppingCartId = shoppingCartId;
     }
 
-    public PokemonDto getPokemonDto() {
-        return pokemonDto;
+    public Long getPokemonId() {
+        return pokemonId;
     }
 
-    public void setPokemonDto(PokemonDto pokemonDto) {
-        this.pokemonDto = pokemonDto;
+    public void setPokemonId(Long pokemonId) {
+        this.pokemonId = pokemonId;
+    }
+
+    public String getPokemonName() {
+        return pokemonName;
+    }
+
+    public void setPokemonName(String pokemonName) {
+        this.pokemonName = pokemonName;
     }
 
     public Integer getQuantity() {

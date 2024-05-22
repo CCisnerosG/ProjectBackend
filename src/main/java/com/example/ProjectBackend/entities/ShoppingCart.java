@@ -2,6 +2,8 @@ package com.example.ProjectBackend.entities;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "shoppingcart")
 public class ShoppingCart {
@@ -13,6 +15,7 @@ public class ShoppingCart {
     @ManyToOne //VERIFICAR ESTO, NO ESTOY SEGURO SI ES 0NETOONE
     @JoinColumn(name = "user_id")
     private User user;
+
 
     public Long getId() {
         return id;
@@ -29,4 +32,5 @@ public class ShoppingCart {
     public void setUser(User user) {
         this.user = user;
     }
+
 }

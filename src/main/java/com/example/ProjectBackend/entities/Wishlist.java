@@ -16,8 +16,11 @@ public class Wishlist {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "wishlist", cascade = CascadeType.ALL)
-    private List<WishlistProduct> products;
+//    @OneToMany(mappedBy = "wishlist", cascade = CascadeType.ALL)
+//    private List<WishlistProduct> products;
+
+    public Wishlist() {
+    }
 
     public Long getId() {
         return id;
@@ -35,11 +38,11 @@ public class Wishlist {
         this.user = user;
     }
 
-    public List<WishlistProduct> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<WishlistProduct> products) {
-        this.products = products;
-    }
+//    public List<WishlistProduct> getProducts() {
+//        return products;
+//    }
+//
+//    public void setProducts(List<WishlistProduct> products) {
+//        this.products = products;
+//    }
 }

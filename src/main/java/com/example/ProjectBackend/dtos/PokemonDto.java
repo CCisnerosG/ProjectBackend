@@ -18,6 +18,7 @@ public class PokemonDto {
     private Boolean isLegendary;
 //    private List<Evolution> evolutions;
 
+
     public Integer getId() {
         return id;
     }

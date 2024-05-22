@@ -9,5 +9,5 @@ public interface WishlistProductRepository extends JpaRepository<WishlistProduct
     List<WishlistProduct> findByWishlistId(Long wishlistId);
     WishlistProduct findByWishlistIdAndPokemonId(Long wishlistId, Integer pokemonId);
     void deleteByWishlistId(Long wishlistId);
-
+    void deleteByPokemonId (Integer pokemonId);
 }

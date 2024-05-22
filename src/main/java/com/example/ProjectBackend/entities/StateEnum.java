@@ -1,6 +1,6 @@
 package com.example.ProjectBackend.entities;
 
-public enum OrderEnum {
+public enum StateEnum {
     PENDING,
     CONFIRMED,
     CANCELLED

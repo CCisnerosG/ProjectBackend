@@ -1,11 +1,13 @@
 package com.example.ProjectBackend.services;
 
+import com.example.ProjectBackend.dtos.WishlistProductDto;
 import com.example.ProjectBackend.entities.Pokemon;
 import com.example.ProjectBackend.entities.User;
 import com.example.ProjectBackend.entities.Wishlist;
 import com.example.ProjectBackend.entities.WishlistProduct;
 import com.example.ProjectBackend.repositories.*;
 import jakarta.transaction.Transactional;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,12 +30,17 @@ public class WishlistService {
     @Autowired
     WishlistProductRepository wishlistProductRepository;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
+    @Transactional
     public List<WishlistProduct> getAllProducts(Long userId){
         Wishlist wishlist = wishlistRepository.findByUserId(userId);
-        return wishlistProductRepository.findByWishlistId(wishlist.getId());
+        List<WishlistProduct> products = wishlistProductRepository.findByWishlistId(wishlist.getId());
+        return products;
     }
 
-    public void addToWishlist(Long userId, Integer pokemonId){
+    public WishlistProductDto addToWishlist(Long userId, Integer pokemonId){
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         Wishlist wishlist = wishlistRepository.findByUserId(userId);
         if (wishlist == null){
@@ -52,6 +59,9 @@ public class WishlistService {
         wishlistRepository.save(wishlist);
         wishlistProductRepository.save(wishlistProduct);
 
+        WishlistProductDto wishlistProductDto = modelMapper.map(wishlistProduct, WishlistProductDto.class);
+
+        return wishlistProductDto;
     }
 
     @Transactional
@@ -67,5 +77,10 @@ public class WishlistService {
 
     public Wishlist findByUserId(Long userId) {
         return wishlistRepository.findByUserId(userId);
+    }
+
+    @Transactional
+    public void deleteProductByPokemonId(Integer pokemonId){
+        wishlistProductRepository.deleteByPokemonId(pokemonId);
     }
 }

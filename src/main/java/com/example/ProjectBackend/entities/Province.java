@@ -2,18 +2,17 @@ package com.example.ProjectBackend.entities;
 
 import jakarta.persistence.*;
 
-import java.util.List;
-
 @Entity
-public class Country {
+public class Province {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String name;
 
-    @OneToMany
-    private List<Province> provinces;
+    @JoinColumn(name = "country_id")
+    @ManyToOne
+    private Country country;
 
     public Integer getId() {
         return id;
@@ -31,11 +30,11 @@ public class Country {
         this.name = name;
     }
 
-    public List<Province> getStates() {
-        return provinces;
+    public Country getCountry() {
+        return country;
     }
 
-    public void setStates(List<Province> provinces) {
-        this.provinces = provinces;
+    public void setCountry(Country country) {
+        this.country = country;
     }
 }

@@ -2,6 +2,7 @@ package com.example.ProjectBackend.dtos;
 
 
 import com.example.ProjectBackend.entities.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
 

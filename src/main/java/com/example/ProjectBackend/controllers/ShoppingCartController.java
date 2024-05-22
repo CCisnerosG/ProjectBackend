@@ -3,8 +3,8 @@ package com.example.ProjectBackend.controllers;
 import com.example.ProjectBackend.entities.ShoppingCartProduct;
 import com.example.ProjectBackend.services.ShoppingCartService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,4 +32,21 @@ public class ShoppingCartController {
         shoppingCartService.fromWishlistToCart(userId);
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/{pokemonId}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Integer pokemonId){
+        shoppingCartService.deleteProductByPokemonId(pokemonId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{pokemonId}")
+    public ResponseEntity<String> updateProductQuantity(@PathVariable Integer pokemonId, @RequestParam Integer quantity) {
+        try {
+            shoppingCartService.updateQuantity(pokemonId, quantity);
+            return ResponseEntity.ok("Product quantity updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating product quantity: " + e.getMessage());
+        }
+    }
+
 }

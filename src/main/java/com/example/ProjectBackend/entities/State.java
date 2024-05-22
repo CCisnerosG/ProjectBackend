@@ -1,40 +1,69 @@
 package com.example.ProjectBackend.entities;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.util.Date;
 
 @Entity
 public class State {
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(nullable = false)
     private Integer id;
 
-    private String name;
+    @Column(unique = true, nullable = false)
+    @Enumerated(EnumType.STRING)
+    private StateEnum name;
 
-    @JoinColumn(name = "country_id")
-    @ManyToOne
-    private Country country;
+    @CreationTimestamp
+    @Column(updatable = false, name = "created_at")
+    private Date createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private Date updatedAt;
 
     public Integer getId() {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
+    public StateEnum getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public State setName(StateEnum name) {
         this.name = name;
+        return this;
     }
 
-    public Country getCountry() {
-        return country;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCountry(Country country) {
-        this.country = country;
+    public State setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+        return this;
     }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public State setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
+    }
+
 }

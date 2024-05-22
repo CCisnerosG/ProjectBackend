@@ -1,5 +1,6 @@
 package com.example.ProjectBackend.controllers;
 
+import com.example.ProjectBackend.dtos.WishlistProductDto;
 import com.example.ProjectBackend.entities.ShoppingCartProduct;
 import com.example.ProjectBackend.entities.WishlistProduct;
 import com.example.ProjectBackend.services.WishlistService;
@@ -16,18 +17,22 @@ public class WishlistController {
     WishlistService wishlistService;
 
     @PostMapping("/add")
-    public ResponseEntity<String> addToWishlist (@RequestParam Long userId, @RequestParam Integer pokemonId){
-        wishlistService.addToWishlist(userId, pokemonId);
-        return ResponseEntity.ok("Item added to wishlist successfully");
+    public ResponseEntity<WishlistProductDto> addToWishlist (@RequestParam Long userId, @RequestParam Integer pokemonId){
+        WishlistProductDto wishlistProductDto = wishlistService.addToWishlist(userId, pokemonId);
+        return ResponseEntity.ok(wishlistProductDto);
     }
 
     @GetMapping("/products")
-    public ResponseEntity<List<WishlistProduct>> getAllProducts (@RequestParam Long userId){
-        List<WishlistProduct> products = wishlistService.getAllProducts(userId);
-        return ResponseEntity.ok(products);
+    public List<WishlistProduct> getAllProducts(@RequestParam Long userId) {
+       return wishlistService.getAllProducts(userId);
     }
 
-//    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{pokemonId}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Integer pokemonId){
+        wishlistService.deleteProductByPokemonId(pokemonId);
+        return ResponseEntity.noContent().build();
+    }
+
 
 
 }

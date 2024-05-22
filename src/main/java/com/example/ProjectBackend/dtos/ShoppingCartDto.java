@@ -1,11 +1,12 @@
 package com.example.ProjectBackend.dtos;
 
-import com.example.ProjectBackend.entities.User;
-import jakarta.persistence.*;
+import com.example.ProjectBackend.dtos.ShoppingCartProductDto;
+
+import java.util.List;
 
 public class ShoppingCartDto {
     private Long id;
-    private User user;
+    private Long userId;
 
     public Long getId() {
         return id;
@@ -15,11 +16,12 @@ public class ShoppingCartDto {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
+
 }

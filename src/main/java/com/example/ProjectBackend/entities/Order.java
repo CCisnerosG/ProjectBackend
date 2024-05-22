@@ -1,8 +1,10 @@
 package com.example.ProjectBackend.entities;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
+import java.util.Optional;
 
 @Entity
 @Table(name = "purchase")
@@ -10,36 +12,36 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    private Integer id;
+    private Long id;
 
-    @Column(unique = true, nullable = false)
-    @Enumerated(EnumType.STRING)
-    private OrderEnum state;
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "state_id", referencedColumnName = "id", nullable = false)
+    private State state;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
+    @Column(updatable = false, name = "created_at")
     private Date orderDate;
 
     @Column(nullable = false)
     private Integer total;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public OrderEnum getState() {
-        return state;
-    }
+    public State getState(){return state;}
 
-    public void setState(OrderEnum state) {
+    public Order setState(State state){
         this.state = state;
+        return this;
     }
 
     public User getUser() {

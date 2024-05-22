@@ -1,10 +1,8 @@
 package com.example.ProjectBackend.services;
 
+import com.example.ProjectBackend.dtos.WishlistProductDto;
 import com.example.ProjectBackend.entities.*;
-import com.example.ProjectBackend.repositories.PokemonRepository;
-import com.example.ProjectBackend.repositories.ShoppingCartProductRepository;
-import com.example.ProjectBackend.repositories.ShoppingCartRepository;
-import com.example.ProjectBackend.repositories.UserRepository;
+import com.example.ProjectBackend.repositories.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +25,9 @@ public class ShoppingCartService {
 
     @Autowired
     private WishlistService wishlistService;
+
+    @Autowired
+    private WishlistRepository wishlistRepository;
 
     public ShoppingCartService(ShoppingCartRepository shoppingCartRepository) {
         this.shoppingCartRepository = shoppingCartRepository;
@@ -64,7 +65,7 @@ public class ShoppingCartService {
 
     @Transactional
     public void fromWishlistToCart(Long userId){
-        Wishlist wishlist = wishlistService.wishlistRepository.findByUserId(userId);
+        Wishlist wishlist = wishlistRepository.findByUserId(userId);
         List<WishlistProduct> wishlistProducts = wishlistService.getAllProducts(wishlist.getId());
 
         for (WishlistProduct product : wishlistProducts){
@@ -72,7 +73,17 @@ public class ShoppingCartService {
         }
 
         wishlistService.emptyWishlist(wishlist.getId());
-        wishlistService.deleteWishlist(wishlist.getId());
+    }
+
+    @Transactional
+    public void deleteProductByPokemonId(Integer pokemonId){
+        shoppingCartProductRepository.deleteByPokemonId(pokemonId);
+    }
+
+    public void updateQuantity(Integer pokemonId, Integer newQuantity) {
+        ShoppingCartProduct product = shoppingCartProductRepository.findByPokemonId(pokemonId);
+        product.setQuantity(newQuantity);
+        shoppingCartProductRepository.save(product);
     }
 
 }
