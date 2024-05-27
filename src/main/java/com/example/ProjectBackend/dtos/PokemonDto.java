@@ -1,6 +1,8 @@
 package com.example.ProjectBackend.dtos;
 
 
+import java.util.List;
+
 public class PokemonDto {
     private Integer id;
     private String name;
@@ -16,6 +18,7 @@ public class PokemonDto {
     private Integer generation;
     private String cries;
     private Boolean isLegendary;
+    private String icon_sprite;
 //    private List<Evolution> evolutions;
 
 
@@ -131,7 +134,15 @@ public class PokemonDto {
         isLegendary = legendary;
     }
 
-//    public List<Evolution> getEvolutions() {
+    public String getIcon_sprite() {
+        return icon_sprite;
+    }
+
+    public void setIcon_sprite(String icon_sprite) {
+        this.icon_sprite = icon_sprite;
+    }
+
+    //    public List<Evolution> getEvolutions() {
 //        return evolutions;
 //    }
 //

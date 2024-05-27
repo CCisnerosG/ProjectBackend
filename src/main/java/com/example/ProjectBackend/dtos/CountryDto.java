@@ -1,19 +1,11 @@
-package com.example.ProjectBackend.entities;
-
-import jakarta.persistence.*;
+package com.example.ProjectBackend.dtos;
 
 import java.util.List;
 
-@Entity
-public class Country {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class CountryDto {
     private Integer id;
-
     private String name;
-
-    @OneToMany(mappedBy = "country")
-    private List<Province> provinces;
+    private List<ProvinceDto> provinces;
 
     public Integer getId() {
         return id;
@@ -31,11 +23,11 @@ public class Country {
         this.name = name;
     }
 
-    public List<Province> getProvinces() {
+    public List<ProvinceDto> getProvinces() {
         return provinces;
     }
 
-    public void setProvinces(List<Province> provinces) {
+    public void setProvinces(List<ProvinceDto> provinces) {
         this.provinces = provinces;
     }
 }

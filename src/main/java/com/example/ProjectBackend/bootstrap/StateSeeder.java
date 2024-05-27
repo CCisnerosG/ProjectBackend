@@ -1,9 +1,8 @@
 package com.example.ProjectBackend.bootstrap;
 
-
-import com.example.ProjectBackend.entities.Role;
-import com.example.ProjectBackend.entities.RoleEnum;
-import com.example.ProjectBackend.repositories.RoleRepository;
+import com.example.ProjectBackend.entities.State;
+import com.example.ProjectBackend.entities.StateEnum;
+import com.example.ProjectBackend.repositories.StateRepository;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -13,37 +12,35 @@ import java.util.Map;
 import java.util.Optional;
 
 @Component
-public class RoleSeeder implements ApplicationListener<ContextRefreshedEvent> {
-    private final RoleRepository roleRepository;
+public class StateSeeder implements ApplicationListener<ContextRefreshedEvent> {
+    private final StateRepository stateRepository;
 
-
-    public RoleSeeder(RoleRepository roleRepository) {
-        this.roleRepository = roleRepository;
+    public StateSeeder(StateRepository stateRepository) {
+        this.stateRepository = stateRepository;
     }
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-        this.loadRoles();
+        this.loadStates();
     }
 
-    private void loadRoles() {
-        RoleEnum[] roleNames = new RoleEnum[] { RoleEnum.USER, RoleEnum.ADMIN, RoleEnum.SUPER_ADMIN };
-        Map<RoleEnum, String> roleDescriptionMap = Map.of(
-                RoleEnum.USER, "Default user role",
-                RoleEnum.ADMIN, "Administrator role",
-                RoleEnum.SUPER_ADMIN, "Super Administrator role"
+    private void loadStates() {
+        StateEnum[] stateNames = new StateEnum[]{StateEnum.PENDING, StateEnum.CANCELLED, StateEnum.CONFIRMED};
+        Map<StateEnum, String> stateDescriptionMap = Map.of(
+                StateEnum.PENDING, "Default order state",
+                StateEnum.CANCELLED, "Order cancelled",
+                StateEnum.CONFIRMED, "Order confirmed"
         );
 
-        Arrays.stream(roleNames).forEach((roleName) -> {
-            Optional<Role> optionalRole = roleRepository.findByName(roleName);
+        Arrays.stream(stateNames).forEach((stateName) -> {
+            Optional<State> optionalState = stateRepository.findByName(stateName);
 
-            optionalRole.ifPresentOrElse(System.out::println, () -> {
-                Role roleToCreate = new Role();
+            optionalState.ifPresentOrElse(System.out::println, () -> {
+                State stateToCreate = new State();
 
-                roleToCreate.setName(roleName)
-                        .setDescription(roleDescriptionMap.get(roleName));
+                stateToCreate.setName(stateName);
 
-                roleRepository.save(roleToCreate);
+                stateRepository.save(stateToCreate);
             });
         });
     }

@@ -27,7 +27,14 @@ public class Order {
     private Date orderDate;
 
     @Column(nullable = false)
+    private String address;
+
+    @Column(nullable = false)
     private Integer total;
+
+    @Column(nullable = false)
+    private String paymentMethod;
+
 
     public Long getId() {
         return id;
@@ -66,5 +73,21 @@ public class Order {
 
     public void setTotal(Integer total) {
         this.total = total;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 }

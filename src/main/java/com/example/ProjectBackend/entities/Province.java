@@ -1,5 +1,6 @@
 package com.example.ProjectBackend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -12,6 +13,7 @@ public class Province {
 
     @JoinColumn(name = "country_id")
     @ManyToOne
+    @JsonIgnore
     private Country country;
 
     public Integer getId() {

@@ -2,12 +2,13 @@ package com.example.ProjectBackend.repositories;
 
 import com.example.ProjectBackend.entities.Pokemon;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 
-import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,5 +43,16 @@ public interface PokemonRepository extends JpaRepository<Pokemon, Integer>, JpaS
 
     List<Pokemon> findByGenerationAndType(Integer generation, String type);
 
-    Page<Pokemon> findAll(Pageable pageable);
+    @Query("SELECT p FROM Pokemon p WHERE " +
+            "(:name IS NULL OR p.name LIKE %:name%) " +
+            "AND (:type IS NULL OR p.type = :type) " +
+            "AND (:generation IS NULL OR p.generation = :generation) " +
+            "AND (:minPrice IS NULL OR p.price >= :minPrice) " +
+            "AND (:maxPrice IS NULL OR p.price <= :maxPrice)")
+    Page<Pokemon> findFilteredPokemon(@Param("name") String name,
+                                      @Param("type") String type,
+                                      @Param("generation") Integer generation,
+                                      @Param("minPrice") Integer minPrice,
+                                      @Param("maxPrice") Integer maxPrice,
+                                      Pageable pageable);
 }

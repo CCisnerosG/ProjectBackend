@@ -3,6 +3,9 @@ package com.example.ProjectBackend.controllers;
 import com.example.ProjectBackend.dtos.PokemonDto;
 import com.example.ProjectBackend.entities.Pokemon;
 import com.example.ProjectBackend.services.PokemonService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,8 +22,8 @@ public class PokemonController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Pokemon>> allProducts(){
-        List <Pokemon> pokemons = pokemonService.allProducts();
+    public ResponseEntity<List<PokemonDto>> allProducts(){
+        List <PokemonDto> pokemons = pokemonService.allProducts();
 
         return ResponseEntity.ok(pokemons);
     }
@@ -44,18 +47,21 @@ public class PokemonController {
     }
 
     @GetMapping("/{name}")
-    public ResponseEntity<List<Pokemon>> getPokemonByName(@PathVariable String name){
-        List<Pokemon> pokemonList = pokemonService.getPokemonByName(name);
+    public ResponseEntity<List<PokemonDto>> getPokemonByName(@PathVariable String name){
+        List<PokemonDto> pokemonList = pokemonService.getPokemonByName(name);
         return ResponseEntity.ok(pokemonList);
     }
 
     @GetMapping("/filter")
-    public ResponseEntity<List<Pokemon>> getFilteredPokemon(@RequestParam(required = false) String name,
+    public ResponseEntity<Page<PokemonDto>> getPagedPokemon(@RequestParam(required = false) String name,
                                                             @RequestParam(required = false) String type,
                                                             @RequestParam(required = false) Integer generation,
                                                             @RequestParam(required = false) Integer minPrice,
-                                                            @RequestParam(required = false) Integer maxPrice){
-        List<Pokemon> pokemonList = pokemonService.getFilteredPokemon(name, type, generation, minPrice, maxPrice);
-        return ResponseEntity.ok(pokemonList);
+                                                            @RequestParam(required = false) Integer maxPrice,
+                                                            @RequestParam(defaultValue = "1") int page,
+                                                            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<PokemonDto> pokemonPage = pokemonService.getPagedPokemon(name, type, generation, minPrice, maxPrice, pageable);
+        return ResponseEntity.ok(pokemonPage);
     }
 }

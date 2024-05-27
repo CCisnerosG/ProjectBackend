@@ -1,17 +1,22 @@
 package com.example.ProjectBackend.exceptions;
 
+import com.example.ProjectBackend.responses.ResponseError;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AccountStatusException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @RestControllerAdvice
-public class GlobalExceptionHandler {
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ProblemDetail handleSecurityException(Exception exception) {
         ProblemDetail errorDetail = null;
@@ -52,5 +57,35 @@ public class GlobalExceptionHandler {
         }
 
         return errorDetail;
+    }
+
+    @ExceptionHandler(value = {PokemonAlreadyExistsException.class})
+    protected ResponseEntity<ResponseError> handleConflict(PokemonAlreadyExistsException ex, WebRequest request) {
+        return new ResponseEntity<ResponseError>(new ResponseError(ex.getMessage(), 410), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = {TokenExpiredException.class})
+    protected ResponseEntity<ResponseError> handleConflict(TokenExpiredException ex, WebRequest request) {
+        return new ResponseEntity<ResponseError>(new ResponseError(ex.getMessage(), 401), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = {UserNameAlreadyExistsException.class})
+    protected ResponseEntity<ResponseError> handleConflict(UserNameAlreadyExistsException ex, WebRequest request) {
+        return new ResponseEntity<ResponseError>(new ResponseError(ex.getMessage(), 410), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = {UserAlreadyExistsException.class})
+    protected ResponseEntity<ResponseError> handleConflict(UserAlreadyExistsException ex, WebRequest request) {
+        return new ResponseEntity<ResponseError>(new ResponseError(ex.getMessage(), 410), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = {UserNotFoundException.class})
+    protected ResponseEntity<ResponseError> handleConflict(UserNotFoundException ex, WebRequest request) {
+        return new ResponseEntity<ResponseError>(new ResponseError(ex.getMessage(), 404), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = {ShoppingCartNotFound.class})
+    protected ResponseEntity<ResponseError> handleConflict(ShoppingCartNotFound ex, WebRequest request) {
+        return new ResponseEntity<ResponseError>(new ResponseError(ex.getMessage(), 404), HttpStatus.BAD_REQUEST);
     }
 }

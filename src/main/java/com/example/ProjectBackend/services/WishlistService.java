@@ -5,6 +5,8 @@ import com.example.ProjectBackend.entities.Pokemon;
 import com.example.ProjectBackend.entities.User;
 import com.example.ProjectBackend.entities.Wishlist;
 import com.example.ProjectBackend.entities.WishlistProduct;
+import com.example.ProjectBackend.exceptions.PokemonNotFoundException;
+import com.example.ProjectBackend.exceptions.UserNotFoundException;
 import com.example.ProjectBackend.repositories.*;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
@@ -41,7 +43,7 @@ public class WishlistService {
     }
 
     public WishlistProductDto addToWishlist(Long userId, Integer pokemonId){
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Wishlist wishlist = wishlistRepository.findByUserId(userId);
         if (wishlist == null){
             wishlist = new Wishlist();
@@ -53,7 +55,7 @@ public class WishlistService {
         if (wishlistProduct == null){
             wishlistProduct = new WishlistProduct();
             wishlistProduct.setWishlist(wishlist);
-            Pokemon pokemon = pokemonRepository.findById(pokemonId).orElseThrow(() -> new RuntimeException("Pokemon not found"));
+            Pokemon pokemon = pokemonRepository.findById(pokemonId).orElseThrow(PokemonNotFoundException::new);
             wishlistProduct.setPokemon(pokemon);
         }
         wishlistRepository.save(wishlist);

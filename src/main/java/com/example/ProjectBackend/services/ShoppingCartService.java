@@ -2,6 +2,9 @@ package com.example.ProjectBackend.services;
 
 import com.example.ProjectBackend.dtos.WishlistProductDto;
 import com.example.ProjectBackend.entities.*;
+import com.example.ProjectBackend.exceptions.PokemonNotFoundException;
+import com.example.ProjectBackend.exceptions.ShoppingCartNotFound;
+import com.example.ProjectBackend.exceptions.UserNotFoundException;
 import com.example.ProjectBackend.repositories.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,13 +36,21 @@ public class ShoppingCartService {
         this.shoppingCartRepository = shoppingCartRepository;
     }
 
+    public ShoppingCart getShoppingCartByUserId(Long userId) {
+        ShoppingCart cart = shoppingCartRepository.findByUserId(userId);
+        if (cart == null) {
+            throw new ShoppingCartNotFound();
+        }
+        return cart;
+    }
+
     public List<ShoppingCartProduct> getAllProducts(Long userId) {
         ShoppingCart cart = shoppingCartRepository.findByUserId(userId);
         return shoppingCartProductRepository.findByShoppingCartId(cart.getId());
     }
 
     public void addToShoppingCart(Long userId, Integer pokemonId, Integer quantity) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         ShoppingCart cart = shoppingCartRepository.findByUserId(userId);
         if (cart == null) {
             cart = new ShoppingCart();
@@ -47,16 +58,15 @@ public class ShoppingCartService {
             shoppingCartRepository.save(cart);
         }
 
-        ShoppingCartProduct cartProduct = shoppingCartProductRepository.findByShoppingCartIdAndPokemonId(cart.getId(), pokemonId);
+            ShoppingCartProduct cartProduct = shoppingCartProductRepository.findByShoppingCartIdAndPokemonId(cart.getId(), pokemonId);
         if (cartProduct == null) {
             cartProduct = new ShoppingCartProduct();
             cartProduct.setShoppingCart(cart);
-            Pokemon pokemon = pokemonRepository.findById(pokemonId).orElseThrow(() -> new RuntimeException("Pokemon not found"));
+            Pokemon pokemon = pokemonRepository.findById(pokemonId).orElseThrow(PokemonNotFoundException::new);
             cartProduct.setPokemon(pokemon);
             cartProduct.setPrice(pokemon.getPrice());
             cartProduct.setQuantity(quantity);
         } else {
-
             cartProduct.setQuantity(cartProduct.getQuantity() + quantity);
         }
         shoppingCartProductRepository.save(cartProduct);
@@ -64,11 +74,11 @@ public class ShoppingCartService {
     }
 
     @Transactional
-    public void fromWishlistToCart(Long userId){
+    public void fromWishlistToCart(Long userId) {
         Wishlist wishlist = wishlistRepository.findByUserId(userId);
-        List<WishlistProduct> wishlistProducts = wishlistService.getAllProducts(wishlist.getId());
+        List<WishlistProduct> wishlistProducts = wishlistService.getAllProducts(userId);
 
-        for (WishlistProduct product : wishlistProducts){
+        for (WishlistProduct product : wishlistProducts) {
             addToShoppingCart(userId, product.getPokemon().getId(), 1);
         }
 
@@ -76,7 +86,7 @@ public class ShoppingCartService {
     }
 
     @Transactional
-    public void deleteProductByPokemonId(Integer pokemonId){
+    public void deleteProductByPokemonId(Integer pokemonId) {
         shoppingCartProductRepository.deleteByPokemonId(pokemonId);
     }
 
@@ -84,6 +94,11 @@ public class ShoppingCartService {
         ShoppingCartProduct product = shoppingCartProductRepository.findByPokemonId(pokemonId);
         product.setQuantity(newQuantity);
         shoppingCartProductRepository.save(product);
+    }
+
+    @Transactional
+    public void emptyShoppingCart(Long shoppingCartId) {
+        shoppingCartProductRepository.deleteByShoppingCartId(shoppingCartId);
     }
 
 }

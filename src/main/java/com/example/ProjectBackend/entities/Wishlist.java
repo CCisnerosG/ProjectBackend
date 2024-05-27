@@ -16,9 +16,6 @@ public class Wishlist {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-//    @OneToMany(mappedBy = "wishlist", cascade = CascadeType.ALL)
-//    private List<WishlistProduct> products;
-
     public Wishlist() {
     }
 
