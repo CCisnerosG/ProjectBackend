@@ -3,6 +3,8 @@ package com.example.ProjectBackend.services;
 import com.example.ProjectBackend.dtos.OrderAndProductsDto;
 import com.example.ProjectBackend.dtos.OrderProductDto;
 import com.example.ProjectBackend.entities.*;
+import com.example.ProjectBackend.exceptions.PokemonNotFoundException;
+import com.example.ProjectBackend.exceptions.UserNotFoundException;
 import com.example.ProjectBackend.repositories.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,7 +84,7 @@ public class OrderService {
         List<ShoppingCartProduct> shoppingCartProducts = shoppingCartService.getAllProducts(userId);
 
         Order order = new Order();
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         order.setUser(user);
         State pendingState = stateRepository.findByName(StateEnum.PENDING)
                 .orElseThrow(() -> new RuntimeException("State 'PENDING' not found"));
@@ -106,19 +108,30 @@ public class OrderService {
         if (orderProduct == null) {
             orderProduct = new OrderProduct();
             orderProduct.setOrder(order);
-            Pokemon pokemon = pokemonRepository.findById(pokemonId).orElseThrow(() -> new RuntimeException("Pokemon not found"));
+            Pokemon pokemon = pokemonRepository.findById(pokemonId).orElseThrow(PokemonNotFoundException::new);
             orderProduct.setPokemon(pokemon);
             orderProduct.setPrice(pokemon.getPrice());
+            orderProduct.setSubtotal(pokemon.getSubtotal());
+            orderProduct.setSave(pokemon.getSave());
+            orderProduct.setTaxes(pokemon.getTaxes());
             orderProduct.setQuantity(quantity);
         } else {
             orderProduct.setQuantity(orderProduct.getQuantity() + quantity);
         }
         orderProductRepository.save(orderProduct);
 
-        Integer total = orderProductRepository.findByOrderId(order.getId()).stream()
-                .mapToInt(op -> op.getPrice() * op.getQuantity())
+        Integer subtotalAmount = orderProductRepository.findByOrderId(order.getId()).stream()
+                .mapToInt(op -> op.getSubtotal() * op.getQuantity())
                 .sum();
-        order.setTotal(total);
+        Integer taxesAmount = orderProductRepository.findByOrderId(order.getId()).stream()
+                .mapToInt(op -> op.getTaxes() * op.getQuantity())
+                .sum();
+        Integer saveAmount = orderProductRepository.findByOrderId(order.getId()).stream()
+                .mapToInt(op -> op.getSave() * op.getQuantity())
+                .sum();
+        Integer totalAmount = (subtotalAmount + taxesAmount) - saveAmount;
+        order.setTotal(totalAmount);
+
 
         orderRepository.save(order);
     }
@@ -143,7 +156,10 @@ public class OrderService {
             String cardType = payments[1];
             String lastFourDigits = cardNumber.substring(cardNumber.length() - 4);
             paymentFinal = String.format("XXXX-XXXX-XXXX-%s (%s)", lastFourDigits, cardType);
-        } else {
+        }else if (payments.length == 1){
+            paymentFinal = payments[0];
+        }
+        else {
             paymentFinal = paymentMethod;
         }
         return paymentFinal;

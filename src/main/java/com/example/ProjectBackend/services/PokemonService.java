@@ -3,6 +3,7 @@ package com.example.ProjectBackend.services;
 import com.example.ProjectBackend.dtos.PokemonDto;
 import com.example.ProjectBackend.entities.Pokemon;
 import com.example.ProjectBackend.exceptions.PokemonAlreadyExistsException;
+import com.example.ProjectBackend.exceptions.PokemonIdNullException;
 import com.example.ProjectBackend.exceptions.PokemonNotFoundException;
 import com.example.ProjectBackend.repositories.PokemonRepository;
 import jakarta.transaction.Transactional;
@@ -37,7 +38,11 @@ public class PokemonService {
         Optional<Pokemon> optionalPokemon = pokemonRepository.findById(input.getId());
         if(optionalPokemon.isPresent()){
             throw new PokemonAlreadyExistsException();
-        }else {
+        }
+        if(input.getId() == null){
+            throw new PokemonIdNullException();
+        }
+        else {
             Pokemon pokemon = modelMapper.map(input, Pokemon.class);
             return pokemonRepository.save(pokemon);
         }

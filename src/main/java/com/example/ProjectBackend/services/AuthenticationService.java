@@ -6,6 +6,7 @@ import com.example.ProjectBackend.dtos.RegisterUserDto;
 import com.example.ProjectBackend.entities.Role;
 import com.example.ProjectBackend.entities.RoleEnum;
 import com.example.ProjectBackend.entities.User;
+import com.example.ProjectBackend.exceptions.LoginUnsuccessfulException;
 import com.example.ProjectBackend.repositories.RoleRepository;
 import com.example.ProjectBackend.repositories.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -54,9 +55,8 @@ public class AuthenticationService {
     }
 
     public User authenticate(LoginUserDto input) {
-        if (input.getEmail() == null || input.getEmail().isEmpty() ||
-                input.getPassword() == null || input.getPassword().isEmpty()) {
-            throw new BadCredentialsException("Email and password must not be empty");
+        if (input == null ){
+            throw new LoginUnsuccessfulException();
         }
 
         authenticationManager.authenticate(

@@ -24,6 +24,15 @@ public class OrderProduct {
     @Column(nullable = false)
     private Integer price;
 
+    @Column(nullable = false)
+    private Integer save;
+
+    @Column(nullable = false)
+    private Integer taxes;
+
+    @Column(nullable = false)
+    private Integer subtotal;
+
     public Long getId() {
         return id;
     }
@@ -62,5 +71,29 @@ public class OrderProduct {
 
     public void setPrice(Integer price) {
         this.price = price;
+    }
+
+    public Integer getSave() {
+        return save;
+    }
+
+    public void setSave(Integer save) {
+        this.save = save;
+    }
+
+    public Integer getTaxes() {
+        return taxes;
+    }
+
+    public void setTaxes(Integer taxes) {
+        this.taxes = taxes;
+    }
+
+    public Integer getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(Integer subtotal) {
+        this.subtotal = subtotal;
     }
 }

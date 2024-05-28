@@ -58,7 +58,7 @@ public class PokemonController {
                                                             @RequestParam(required = false) Integer generation,
                                                             @RequestParam(required = false) Integer minPrice,
                                                             @RequestParam(required = false) Integer maxPrice,
-                                                            @RequestParam(defaultValue = "1") int page,
+                                                            @RequestParam(defaultValue = "0") int page,
                                                             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<PokemonDto> pokemonPage = pokemonService.getPagedPokemon(name, type, generation, minPrice, maxPrice, pageable);
